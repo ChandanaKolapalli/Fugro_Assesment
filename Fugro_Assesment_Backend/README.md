@@ -23,14 +23,14 @@ This is a full-stack application to manage offshore ground sampling data for env
 Make sure you have the following installed:
 - Java 17 or later
 - Maven 3+
-- An IDE (IntelliJ IDEA, Eclipse, or STS)
+- An IDE (IntelliJ IDEA, or STS)
 
 ## Getting Started
 
 ### Clone the Repository
 ```sh
-git clone https://github.com/yourusername/spring-boot-book-api.git
-cd spring-boot-book-api
+git clone https://github.com/ChandanaKolapalli/Fugro_Assesment.git
+cd Fugro_Assesment_Backend
 ```
 
 ### Build and Run the Application
