@@ -1,5 +1,6 @@
 package com.furgo.frontend.rcp.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -15,7 +16,10 @@ import com.furgo.frontend.rcp.model.Location;
 import com.furgo.frontend.rcp.model.Sample;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
 
 import ogsfrontend.LocalDateAdapter;
 
@@ -83,13 +87,20 @@ public class ApiService {
 		conn.getResponseCode(); // Execute request
 	}
 	
-	public void editSample(int id) throws IOException {
-		URL url = new URL(BASE_URL + "/update/" + id);
+	public int editSample(Sample sample) throws IOException {		
+		URL url = new URL(BASE_URL + "/update/" + sample.getId());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		// Set Authorization Header
         conn.setRequestProperty("Authorization", encodeCredentials());
 		conn.setRequestMethod("PUT");
-		conn.getResponseCode();
+		conn.setRequestProperty("Content-Type", "application/json");
+		conn.setDoOutput(true);
+		String jsonInput = gson.toJson(sample);
+		try (OutputStream os = conn.getOutputStream()) {
+			byte[] input = jsonInput.getBytes("utf-8");
+			os.write(input, 0, input.length);
+		}
+		return conn.getResponseCode();
 	}
 
 	public void deleteSample(int id) throws IOException {
@@ -99,5 +110,51 @@ public class ApiService {
 		// Set Authorization Header
         conn.setRequestProperty("Authorization", encodeCredentials());
 		conn.getResponseCode();
+	}
+	
+	public double getAverageWaterContent() throws IOException {   
+	    URL url = new URL(BASE_URL + "/avgwatercontent");
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		
+		// Set Authorization Header
+        conn.setRequestProperty("Authorization", encodeCredentials());
+
+        int responseCode = conn.getResponseCode();
+        
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                // Parse JSON response
+                //JSONObject json = new JSONObject(response.toString());
+                JsonElement jsonElement = JsonParser.parseString(response.toString());
+                return jsonElement.getAsDouble();
+            }
+        } else {
+            throw new IOException("Failed to fetch average water content. HTTP response code: " + responseCode);
+        }
+	}
+
+	public List<Sample> fetchThresholdSamples() throws IOException {
+		URL url = new URL(BASE_URL + "/thresholdvalues");
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		
+		// Set Authorization Header
+        conn.setRequestProperty("Authorization", encodeCredentials());
+
+		InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+		
+		List<Sample> data = gson.fromJson(reader, new TypeToken<List<Sample>>() {
+		}.getType());
+		
+		
+		return data;
 	}
 }

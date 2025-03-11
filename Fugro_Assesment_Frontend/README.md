@@ -5,12 +5,16 @@ This is a full-stack application to manage offshore ground sampling data for env
 
 ## Features
 - Displays sampling data in a table format.
-- Supports adding and deleting samples.
+- Supports adding,editing and deleting samples.
 - Calls backend REST APIs to manage data.
+- Displays the Average Water Content for the samples
+- Displays the Threshold Values that supresses the configured values in the backend
+- Basic validation is added
+
 
 ## Prerequisites
 Make sure you have the following installed:
-- Java 17 or later
+- Java 21 or later
 - An Eclipse IDE 
 
 ## Getting Started
@@ -40,3 +44,6 @@ cd Fugro_Assesment_Frontend
 - The main window displays all sample data.
 - Click "Add Sample" to insert new records.
 - Select a sample and use "Delete" button.
+- Select a sample and use "Edit" button.
+- Click on "Get Avg Water Content" button to check the Average water content of all samples.
+- Click on "Get Threshold Samples" button to get the samples surpassing threshold values 
