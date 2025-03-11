@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Sample {
 
 	private int id;
+	
 	private Location location;
 	private LocalDate dateCollected;
 	private Double unitWeight;
@@ -55,6 +56,18 @@ public class Sample {
 		this.waterContent = waterContent;
 		this.shearStrength = shearStrength;
 	}
+	
+	public Sample(int id, Location location, LocalDate dateCollected, Double unitWeight, Double waterContent,
+			Double shearStrength) {
+		super();
+		this.id = id;
+		this.location = location;
+		this.dateCollected = dateCollected;
+		this.unitWeight = unitWeight;
+		this.waterContent = waterContent;
+		this.shearStrength = shearStrength;
+	}
+	
 	@Override
 	public String toString() {
 		return "Sample [id=" + id + ", location=" + location + ", dateCollected=" + dateCollected + ", unitWeight="
